@@ -8,7 +8,7 @@ const int FRAME_HEIGHT = 540;
 
 // Txt coord offset & box size
 const int TXT_X = 50, TXT_Y = 50;
-const int TXT_WIDTH = 50, TXT_HEIGHT = 50;
+const int TXT_WIDTH = 50, TXT_HEIGHT = 40;
 
 // Populate btn coord & box size
 const int POP_BTN_X = 0;

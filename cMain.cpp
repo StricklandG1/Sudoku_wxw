@@ -19,7 +19,8 @@ cMain::cMain() : wxFrame(nullptr,
 	{
 		for (int y = 0; y < HEIGHT; ++y)
 		{
-			m_txt[x][y] = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(TXT_X * x, TXT_Y * y), wxSize(TXT_WIDTH, TXT_HEIGHT));
+			//m_txt[x][y] = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(TXT_X * x, TXT_Y * y), wxSize(TXT_WIDTH, TXT_HEIGHT));
+			m_lbl[x][y] = new wxStaticText(this, wxID_ANY, "0", wxPoint(TXT_X * x, TXT_Y * y + 10), wxSize(TXT_WIDTH, TXT_HEIGHT),wxALIGN_CENTER);
 			board[x][y] = 0;
 		}
 	}
@@ -93,7 +94,8 @@ void cMain::solve_board()
 
 		solved = check_solved_board();
 		//++iterations;
-		matrix_to_txt();
+		//matrix_to_txt();
+		matrix_to_lbl();
 	}
 }
 
@@ -292,6 +294,32 @@ void cMain::matrix_to_txt()
 		}
 	}
 }
+
+void cMain::lbl_to_matrix()
+{
+	for (int i = 0; i < cMain::HEIGHT; ++i)
+	{
+		for (int j = 0; j < cMain::WIDTH; ++j)
+		{
+			board[i][j] = wxAtoi(m_lbl[i][j]->GetLabelText());
+		}
+	}
+}
+
+void cMain::matrix_to_lbl()
+{
+	wxString temp;
+	for (int i = 0; i < cMain::HEIGHT; ++i)
+	{
+		for (int j = 0; j < cMain::WIDTH; ++j)
+		{
+			temp = "";
+			temp << board[i][j];
+			m_lbl[j][i]->SetLabelText(temp);
+		}
+	}
+}
+
 
 void cMain::OnPopulateClicked(wxCommandEvent &evt)
 {

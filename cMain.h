@@ -13,6 +13,7 @@ public:
 	wxButton* m_btn_populate = nullptr;
 	wxButton* m_btn_solve = nullptr;
 	wxTextCtrl* m_txt[HEIGHT][WIDTH];
+	wxStaticText* m_lbl[HEIGHT][WIDTH];
 
 	
 	
@@ -33,6 +34,9 @@ private:
 
 	void txt_to_matrix();
 	void matrix_to_txt();
+
+	void lbl_to_matrix();
+	void matrix_to_lbl();
 
 	void OnPopulateClicked(wxCommandEvent &evt);
 	void OnSolveClicked(wxCommandEvent &evt);
