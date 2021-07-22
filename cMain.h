@@ -1,25 +1,28 @@
 #pragma once
-
 #include "wx/wx.h"
+#include <wx/filepicker.h>
+
 class cMain : public wxFrame
 {
-public:
-	cMain();
-	~cMain();
-
+private:
 	const static int WIDTH = 9;
 	const static int HEIGHT = 9;
 
 	wxButton* m_btn_populate = nullptr;
 	wxButton* m_btn_solve = nullptr;
+	wxFilePickerCtrl* m_fpicker;
 	wxTextCtrl* m_txt[HEIGHT][WIDTH];
 	wxStaticText* m_lbl[HEIGHT][WIDTH];
+	wxStaticText* time_elapsed;
+	wxStaticText* time_text;
+	wxStopWatch m_time;
 
-	
-	
+public:
+	cMain();
+	~cMain();
+
 	int board[HEIGHT][WIDTH];
 
-private:
 	bool populate_board();
 	void solve_board();
 	void get_first_move(int& start_y, int& start_x);

@@ -1,5 +1,8 @@
 #include "cMain.h"
 #include "constants.h"
+#include <wx/wfstream.h>
+#include <wx/txtstrm.h>
+#include <wx/sstream.h>
 #include <stack>
 
 wxBEGIN_EVENT_TABLE(cMain, wxFrame)
@@ -27,6 +30,10 @@ cMain::cMain() : wxFrame(nullptr,
 
 	m_btn_populate = new wxButton(this, 10001, "Populate", wxPoint(POP_BTN_X, POP_BTN_Y), wxSize(POP_BTN_WIDTH, POP_BTN_HEIGHT));
 	m_btn_solve = new wxButton(this, 10002, "Solve", wxPoint(SOLVE_BTN_X, SOLVE_BTN_Y), wxSize(SOLVE_BTN_WIDTH, SOLVE_BTN_HEIGHT));
+	m_fpicker = new wxFilePickerCtrl(this, 10003, "", "", "", wxPoint(FILE_CTRL_X, FILE_CTRL_Y), wxSize(FILE_CTRL_WIDTH, FILE_CTRL_HEIGHT));
+	time_elapsed = new wxStaticText(this, 10004, "Time Elapsed: ", wxPoint(150, 430), wxSize(150, 15));
+	time_text = new wxStaticText(this, 10005, "0.0", wxPoint(225, 430), wxSize(150, 15));
+
 }
 
 cMain::~cMain()
@@ -35,6 +42,27 @@ cMain::~cMain()
 
 bool cMain::populate_board()
 {
+	wxString file = m_fpicker->GetPath();
+	wxString temp;
+	wxFileInputStream in_file(file);
+	wxTextInputStream in_text(in_file, wxT("\x09"), wxConvUTF8);
+	
+	if (in_file.GetLastError() == wxSTREAM_NO_ERROR)
+	{
+		for (int i = 0; i < 9; ++i)
+		{
+			temp = in_text.ReadLine();
+			wxStringInputStream sstream(temp);
+
+			for (int j = 0; j < 9; ++j)
+			{
+				board[j][i] = sstream.GetC() - '0';
+				sstream.GetC();
+			}
+		}
+	}
+
+	matrix_to_lbl();
 	return false;
 }
 
@@ -51,13 +79,8 @@ void cMain::solve_board()
 	bool solved = false;
 
 	int num = 1;
-	//iterations = 0;
 	while (!solved && x < 9 && y < 9)
 	{
-		//if (iterations == 3930)
-		//{
-		//	std::cout << "breakpoint\n\n";
-		//}
 		bool valid = check_num(num, y, x);
 		if (valid)
 		{
@@ -93,10 +116,12 @@ void cMain::solve_board()
 		}
 
 		solved = check_solved_board();
-		//++iterations;
-		//matrix_to_txt();
 		matrix_to_lbl();
+		m_time.Pause();
+		time_text->SetLabelText(wxString::Format(wxT("%f"), m_time.Time() * .001));
+		m_time.Resume();
 	}
+	m_time.Pause();
 }
 
 void cMain::get_first_move(int& start_y, int& start_x)
@@ -315,19 +340,20 @@ void cMain::matrix_to_lbl()
 		{
 			temp = "";
 			temp << board[i][j];
-			m_lbl[j][i]->SetLabelText(temp);
+			m_lbl[i][j]->SetLabelText(temp);
 		}
 	}
 }
 
-
 void cMain::OnPopulateClicked(wxCommandEvent &evt)
 {
+	populate_board();
 	evt.Skip();
 }
 
 void cMain::OnSolveClicked(wxCommandEvent &evt)
 {
+	m_time.Start(0);
 	solve_board();
 	evt.Skip();
 }
