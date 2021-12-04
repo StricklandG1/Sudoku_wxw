@@ -17,11 +17,13 @@ private:
 	wxStaticText* time_text;
 	wxStopWatch m_time;
 
+	int board[HEIGHT][WIDTH];
+
 public:
 	cMain();
 	~cMain();
 
-	int board[HEIGHT][WIDTH];
+	
 
 	bool populate_board();
 	void solve_board();

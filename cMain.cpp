@@ -22,7 +22,6 @@ cMain::cMain() : wxFrame(nullptr,
 	{
 		for (int y = 0; y < HEIGHT; ++y)
 		{
-			//m_txt[x][y] = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(TXT_X * x, TXT_Y * y), wxSize(TXT_WIDTH, TXT_HEIGHT));
 			m_lbl[x][y] = new wxStaticText(this, wxID_ANY, "0", wxPoint(TXT_X * x, TXT_Y * y + 10), wxSize(TXT_WIDTH, TXT_HEIGHT),wxALIGN_CENTER);
 			board[x][y] = 0;
 		}
@@ -161,7 +160,6 @@ bool cMain::check_num(int num, int row_num, int col_num)
 
 bool cMain::check_row(int num, int board[])
 {
-	bool result;
 	int i = 0;
 	for (int i = 0; i < 9; ++i)
 	{
